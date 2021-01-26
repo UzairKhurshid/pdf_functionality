@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+            /* Style the body */
+            body {
+              font-family: Arial;
+              margin: 0;
+              background:#E5F5FE;
+            }
+            
+            .header {
+              text-align: center;
+              background: #1abc9c;
+              color: white;
+              font-size: 20px;
+              height: 250px;
+              background-image: url('https://servers.uraudits.com//view?Key=meta/header.jpg');
+              background-size: cover;
+              background-position: center;
+              background-repeat: no-repeat;
+            }
+
+            table{
+                background:white;
+                border-color: #F1F2F2;
+            }
+            table tr{
+                border-bottom:1px solid #a2a2a2 !important;
+
+            }
+            /* Overview */
+            .tblOverview {
+                width: 80%;
+                margin:auto;
+                margin-top: 20px;
+                text-align: left;
+                border-collapse: collapse;
+            }
+            .tblOverview th , .tblOverview td{
+                border-left: none !important;
+                border-right: none !important;
+                border-color: transparent;
+                padding:12px;
+
+            }
+            tr.overviewGrad{
+                background: #45d5e0;
+                color:white;
+                font-size: 25px;
+            }
+            tr.overviewGrad th{
+                background:none;
+            }
+            .overviewGrey{
+                background:#F1F2F2
+            }
+
+
+            /* Sections  */
+            .tblSections{
+                width: 80%;
+                margin:auto;
+                margin-top: 20px;
+                text-align: left;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            .tblSections th , .tblSections td{
+                border-left: none;
+                border-right: none;
+                padding:5px;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            .tblSections span{
+                font-size: 12px;
+            }
+            .secGrad{
+                background: #3cc5e9;
+                color:white;
+                font-size:25px
+
+            }
+
+
+            /* Overview */
+            .tblComments {
+                width: 80%;
+                margin:auto;
+                margin-top: 20px;
+                text-align: left;
+                border-collapse: collapse;
+            }
+            .tblComments th , .tblComments td{
+                border-left: none !important;
+                border-right: none !important;
+                border-color: transparent;
+                padding:10px;
+                padding-left: 15px;
+                padding-right: 15px;
+
+            }
+            tr.commentsGrad{
+                background: #45d5e0;
+                color:white;
+                font-size: 25px;
+            }
+            tr.commentsGrad th{
+                background:none;
+            }
+            .commentsGrey{
+                background:#F1F2F2
+            }
+
+            /* footer */
+            .footer {
+                font-size: 20px;
+                text-align:center;
+                position:inherit;
+            }
+            </style>
+    </head>
+    <body>
+
+        <% var globalSize=1065; var globalPageNo=1; %>
+
+        <!-- *******************Header******************* -->
+
+        <div class="header">  <% globalSize=globalSize-250 %>  </div>
+
+        <!-- *******************Overview******************* -->
+
+
+        <%  globalSize=globalSize-20 %>
+
+        <div class="Overview">
+            <table border=1 class="tblOverview">
+                <tr class="overviewGrad">
+                    <!-- *************************************************** -->
+                    <%  globalSize=globalSize-54 %>
+                    <!-- *************************************************** -->
+
+                    <th colspan="2">Overview</th>
+                    <th style="text-align: right;"><%= inspection_obj.score.toFixed(1) %>%</th>
+                </tr>
+                <tr class="overviewGrey">
+                    
+                    <!-- *************************************************** -->
+                    <% if(inspection_obj.title.length < 73){ %>
+                        <%  globalSize=globalSize-43 %>
+                    <% }else if(inspection_obj.title.length < 144){ %>
+                        <%  globalSize=globalSize-61 %>
+                    <% }else if(inspection_obj.title.length < 206){ %>
+                        <%  globalSize=globalSize-79 %>
+                    <% }else{ %>
+                        <%  globalSize=globalSize-97 %>
+                    <% } %>
+                    <!-- *************************************************** -->
+
+                    <th colspan="3" ><%= inspection_obj.title %></th>
+                </tr>
+                <tr >
+                    <!-- *************************************************** -->
+                    <%  globalSize=globalSize-43 %>
+                    <!-- *************************************************** -->
+                    <td colspan="3" ><%= inspection_obj.user.first_name  %><%= inspection_obj.user.last_name  %><%= inspection_obj.date  %> </td>
+                </tr>
+                <tr class="overviewGrey">
+                    <!-- *************************************************** -->
+                    <%  globalSize=globalSize-43 %>
+                    <!-- *************************************************** -->
+
+                    <th>Inspection Score</th>
+                    <th>Failed Items</th>
+                    <th>Created Actions</th>
+                </tr>
+                <tr>
+                    <!-- *************************************************** -->
+                    <%  globalSize=globalSize-43 %>
+                    <!-- *************************************************** -->
+
+                    <td><%= inspection_obj.score.toFixed(1) %>%</td>
+                    <td>0%</td>
+                    <td>0%</td>
+                </tr>
+            </table>
+        </div>
+        
+        
+        <!-- +496(size) till here , fixed for now only inspection title is dynamic -->
+        <!-- *******************Remaining Section******************* -->
+
+        <% if(inspection_obj.sections){ %>
+            <% inspection_obj.sections.forEach((sec,i)=>{ %>
+
+                <!-- ********************************************* -->
+                <!-- checking for remaining size of page -->
+                <% if(globalSize < 50 ){ %>
+                        
+                    <div id="addSize<%= i%>" style="background:green;"></div>
+                    <script>
+                        var val=<%= globalSize %>
+                        
+                        if( val >= 2 && val <= 45){
+                            window.alert(<%= globalSize %>)
+                            document.getElementById("addSize<%= i%>").style.height ="45px";    
+                        }else{
+                            document.getElementById("addSize<%= i%>").style.height =<%= globalSize %>+"px";
+                        }
+                        
+                    </script>
+                        <% globalSize=1065 %>
+                        <% globalPageNo=globalPageNo+1 %>
+                        <%  globalSize=globalSize-20 %>    
+                <% }else{ %>
+                    <%  globalSize=globalSize-20 %>
+                <% } %>
+                <!-- ********************************************* -->
+
+                <div class="sections">
+                <table border=1 class="tblSections">
+                
+                            <tr class="secGrad">
+
+                                <!-- ********************************************* -->
+                                <% var secTitleChar=sec.title.length %>
+                                <% var x=0 %>
+                                <% if(secTitleChar > 40){ %>
+                                    <% x=secTitleChar/40 %>
+                                    <% x=x.toFixed(0) %>
+                                    <% x=x*29 %>
+                                    <% x=x+40 %>
+                                    
+                                <% }else{ %>
+                                    <% x=40 %>
+                                <% } %>
+
+                                <% if(globalSize > x ){ %>
+                                    <th colspan="2"><%= sec.title %><%= globalSize  %></th>
+                                    <th style="text-align: right;"><%= sec.score.toFixed(1) %>%</th>
+                                    <% globalSize=globalSize-x %>
+                                <% }else{ %>
+                                </tr>
+                                </table>
+                                </div>
+                                    <div id="addSize<%= i%>" style="background:red;"></div>
+                                        <script>
+                                            var val=<%= globalSize %>
+                                            
+                                            if(val >= 2 && val <= 45){
+                                                window.alert(<%= globalSize %>)
+                                                document.getElementById("addSize<%= i%>").style.height ="70px";    
+                                            }else{
+                                                document.getElementById("addSize<%= i%>").style.height =<%= globalSize %>+"px";
+                                            }
+                                        </script>
+                                        <% globalSize=1065 %>
+                                        <% globalPageNo=globalPageNo+1 %>
+                                        <% globalSize=globalSize-x %>
+                                    <table border=1 class="tblSections" >
+                                        <tr class="secGrad">
+                                        <th colspan="2" ><%= sec.title %></th>
+                                        <th style="text-align: right;"><%= sec.score.toFixed(1) %>%</th>        
+                                <% } %>
+                                <!-- *************************************************** -->
+                            </tr>
+
+
+
+
+
+
+
+
+
+                            <% if(sec.CheckListInspections){ %>
+                                <% sec.CheckListInspections.forEach((che)=>{ %>
+                                    <tr class="secGrey">
+                                        <td colspan="3" ><span><%= che.title %></span><br> 
+                                            
+                                            <% if(che.data_type === "Photo" || che.data_type === "Anotation"){ %>
+                                                <img src="https://servers.uraudits.com/view?Key=<%= che.answer.value %>" width="300px">
+                                            <% } else{ %>
+                                                <% if(che.data_type === "Global" || che.data_type === "Custom"){ %>
+                                                    <strong><%= che.custom_answers.join(", ") %></strong>
+                                                <% } else{ %>
+                                                    <% if(che.answer.value){ %>
+                                                        <strong><%= che.answer.value %></strong>
+                                                    <% } else { %>
+                                                        <strong>Unanswered</strong>
+                                                    <% } %>
+                                                <% } %>
+                                            <% } %>
+                                            <% if(che.answer.image !== null){ %>
+                                                <br>
+                                                <img src="https://servers.uraudits.com/view?Key=<%= che.answer.image %>" width="300px">
+                                            <% } %>
+                                            <% if(che.is_conditional === "yes"){ %>
+                                                <% che.conditional.forEach((con)=>{ %>
+                                                    <br><span style="margin-left:10px;margin-top:5px;"><%= con.title %></span><br>
+                                                    <% if(con.data_type === "Global" || con.data_type === "Custom"){ %>
+                                                        <strong style="margin-left:20px;margin-top:5px;"><%= inspection_obj.anwser_obj[con.id].value.join(", ") %></strong>
+                                                    <% } else{ %>
+                                                        <% if(inspection_obj.anwser_obj[con.id].value){ %>
+                                                            <strong style="margin-left:20px;margin-top:5px;"><%= inspection_obj.anwser_obj[con.id].value %></strong>
+                                                        <% } else { %>
+                                                            <strong style="margin-left:20px;margin-top:5px;">Unanswered</strong>
+                                                        <% } %>
+                                                    <% } %>
+                                                <% }) %>
+                                            <% }else{ %>
+                                                <strong></strong>
+                                            <% } %>
+                                            
+                                        </td>
+                                    </tr>
+                                <% }) %>    
+                            <% } %>
+                            
+                        </table>
+                    </div>
+                    
+            <% }) %>
+        <% } %>
+        
+
+
+        <div class="Comments">
+            
+                <% if( inspection_obj.InspectionComments.length != 0 ){ %>
+                    <table border=1 class="tblComments">
+                        <tr class="commentsGrad">
+                            <th colspan="3">Comments</th>
+                        </tr>
+                        <% inspection_obj.InspectionComments.forEach((ic)=>{ %>
+                            <% if(ic.status == "Approved"){ %>
+                                <tr class="commentsGrey"></tr>
+                                    <td colspan="3" ><%= ic.status %> by <%= ic.User.first_name%> <%= ic.User.last_name%> </td>
+                                    <td colspan="3" ><%= ic.comment %> </td>
+                                </tr>
+                            <% } %>
+                        <% }) %>
+                    </table>
+                <% }else{ %>
+                    
+                <% } %>
+        </div>
+
+        <div class="addHeight"></div>
+        
+
+
+        <div class="footer">
+            <img src="https://servers.uraudits.com//view?Key=meta/footer.jpg"  width="100%" height="50px">
+        </div>
+    </body>
+</html>

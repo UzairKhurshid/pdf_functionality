@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+	<title></title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style type="text/css">
+    	header {
+    		height: 250px; 
+    		background-image:url('https://servers.uraudits.com//view?Key=meta/header.jpg');
+    		background-position: center;
+    		background-size: cover;
+  			background-repeat: no-repeat;	
+    	}
+    	.main-content{
+    		padding-top: 50px;
+    		width: 90%;
+    		margin: auto;
+    	}
+    	.main-content p{
+    		font-size: 16px;
+    	}
+    	.main-content h2 , .main-content h3 , .main-content h4 , .main-content h5 ,.main-content h6 , .main-content p {
+    		margin: 0;
+    	}
+    	body{
+    		background:white;
+    		 font-family: Arial;
+             margin: 0;
+             font-family: 'Roboto', sans-serif;
+    	}
+    	.table{
+    		margin-bottom: 50px;
+            page-break-inside: avoid !important;
+    	}
+        .tblBreak{
+            page-break-after: always !important;
+        }
+    	.table .trow{
+    		border:1px solid lightgray;
+    		padding:8px 15px;
+    		background-color: #fff;   
+            page-break-inside: avoid !important;
+            background:#E5F5FE;
+     	}
+    	.table .trow.dflex{
+            height: 30px;
+    	}
+        .trow.dflex > div {
+        float: left;
+        width: 33.3%;
+        }
+    	.thead.trow.dflex {
+    	    background: #0d4673;
+    	    border: #0d4673;
+    	    color:#fff;
+    	    font-size:15px;
+    	}
+    	.tcolored .thead.trow{
+    		 background: #45d5e0;
+    		 border: #45d5e0;
+             font-family: raleway;
+    	}
+		.table .trow.dflex div {
+		    display: flex;
+		    flex: 1 1;
+		}
+		.tcolored .trow:nth-child(even){
+			background:#f2f2f2;
+		}  	
+		.trow span{
+			font-size: 12px;
+			color:#969696;
+		}
+		.trow h6{
+			color: #000;
+		    font-weight: 600;
+		    font-size: 14px; 
+		}
+		.trow img{
+			max-width: 300px;
+			max-height: 300px;
+		}
+        footer{
+            position: fixed;
+        }
+        .L{
+            float: left;
+        }
+        .R{
+            float: right;
+        }
+        
+        
+    </style>
+    
+</head>
+<body>
+<header>
+	<img src="">
+</header>
+<div id="main-content" class="main-content">
+<!-- first table start -->
+	<div class="table tcolored">
+		<div class="thead trow dflex">
+			<h2 class="L">overview</h2>
+			<h2 class="R"><%= inspection_obj.score.toFixed(1) %>%</h2>
+		</div>
+		<div class="trow tbold">
+			<h3><%= inspection_obj.title %></h3>
+		</div>
+		<div class="trow">
+			<p><%= inspection_obj.user.first_name  %><%= inspection_obj.user.last_name  %><%= inspection_obj.date  %></p>
+		</div>
+		<div class="trow dflex">
+			<div>
+				<h4>Inspection Score</h4>
+			</div>
+			<div>
+				<h4>Failed Items</h4>
+			</div>
+			<div>
+				<h4>Created Actions</h4>
+			</div>
+		</div>
+		<div class="trow dflex">
+			<div>
+				<h4><%= inspection_obj.score.toFixed(1) %>%</h4>
+			</div>
+			<div>
+				<h4>0%</h4>
+			</div>
+			<div>
+				<h4>0%</h4>
+			</div>
+		</div>
+
+	</div>	
+	<!-- first table end -->
+    
+    <canvas id="myChart" width="730px" height="400px"></canvas>
+
+    <!-- Section table start -->
+    
+    <% if(inspection_obj.sections){ %>
+        <% inspection_obj.sections.forEach((sec,i)=>{ %>
+            <div class="table tblBreak" style="margin-top: 30px;">
+                <div class="trow" style="min-height: 40px; background:red;">
+                    <h2 class="L"><%= sec.title %></h2>
+                    <h2 class="R"><%= sec.score %>%</h2>
+                </div>
+                
+                <% if(sec.CheckListInspections){ %>
+                    <% sec.CheckListInspections.forEach((che)=>{ %>
+                        <div class="trow">
+                            <span><%= che.title%></span>
+                            <% if(che.data_type === "Photo" || che.data_type === "Anotation"){ %>
+                                <% if(che.answer.value === null || che.answer.value === ""){ %>
+                                    <br>
+                                <% }else{ %>
+                                    <br>
+                                    <img src="https://servers.uraudits.com/view?Key=<%= che.answer.value %>" width="300px" height="300px">
+                                <% } %>    
+                            <% } else{ %>
+                                <% if(che.data_type === "Global" || che.data_type === "Custom"){ %>
+                                    <h6><%= che.custom_answers.join(", ") %></h6>
+                                <% } else{ %>
+                                    <% if(che.data_type === "Signature"){ %>
+                                            <!-- removing signature text , displaying only signature image -->
+                                    <% }else{ %>
+                                    <% if(che.answer.value){ %>
+                                        <h6><%= che.answer.value %></h6>
+                                    <% } else { %>
+                                        <h6>Unanswered</h6>
+                                    <% } %>
+                                    <% } %>
+                                <% } %>
+                            <% } %>
+                            <% if(che.answer.image !== null){ %>
+                                <br>
+                                <img src="https://servers.uraudits.com/view?Key=<%= che.answer.image %>" width="300px" height="300px">
+                            <% } %>
+                            <% if(che.is_conditional === "yes"){ %>
+                                <% che.conditional.forEach((con)=>{ %>
+                                    <br>
+                                    <span><%= con.title %></span><br>
+                                    <% if(con.data_type === "Global" || con.data_type === "Custom"){ %>
+                                        <h6 style="margin-left:20px;margin-top:5px;"><%= inspection_obj.anwser_obj[con.id].value.join(", ") %></h6>
+                                    <% } else{ %>
+                                        <% if(inspection_obj.anwser_obj[con.id].value){ %>
+                                            <h6 style="margin-left:20px;margin-top:5px;"><%= inspection_obj.anwser_obj[con.id].value %></h6>
+                                        <% } else { %>
+                                            <h6 style="margin-left:20px;margin-top:5px;">Unanswered</h6>
+                                        <% } %>
+                                    <% } %>
+                                <% }) %>
+                            <% }else{ %>
+                                <h6></h6>
+                            <% } %>
+                        </div>
+                    <% }) %>    
+                <% } %>	
+            </div>
+        <% }) %>
+    <% } %>
+	<!-- end table -->
+    <div id="barchart_material" style="width: 100%; height: 400px;"></div>
+    <!-- Comments table start -->
+    <% if( inspection_obj.InspectionComments.length != 0 ){ %>
+        <div class="table"> 
+            <div class="thead trow dflex">
+                <h2>Comments</h2>
+            </div>
+            
+            <% inspection_obj.InspectionComments.forEach((ic)=>{ %>
+                <% if(ic.status == "Approved"){ %>
+                    <div class="trow">
+                        <h6 style="color:green;">Approved</h6>
+                    </div>
+                    <div class="trow">
+                        <span><%= ic.status %> by <%= ic.User.first_name%> <%= ic.User.last_name%></span>
+                        <h6><%= ic.comment %></h6>
+                    </div>
+                <% }else{ %>
+                    <div class="trow">
+                        <h6 style="color:red;">Rejected</h6>
+                    </div>
+                    <div class="trow">
+                        <span><%= ic.status %> by <%= ic.User.first_name%> <%= ic.User.last_name%></span>
+                        <h6><%= ic.comment %></h6>
+                    </div>
+                <% } %>
+            <% }) %>  
+        </div>
+    <% } %>
+    <!-- end table -->
+
+    
+	
+
+</div>
+<div class="footer">
+    <img src="https://servers.uraudits.com//view?Key=meta/footer.jpg"  width="100%" height="50px">
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var secName=[];
+        var secScore=[];
+        secName= <%- JSON.stringify(inspection_obj.secName) %>;
+        secScore= <%- JSON.stringify(inspection_obj.secScore) %>;
+
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels:secName,
+            datasets: [{
+            label: 'Section Score',
+            data: secScore,
+            backgroundColor: [
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)', 
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)', 
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)', 
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)', 
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)', 
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)', 
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)', 
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+                'rgba(37, 194, 237, 1)',
+                'rgba(255, 146, 72, 1)',
+                'rgba(0, 173, 30, 1)',
+                'rgba(238, 23, 23,1)',
+            ]
+            }]
+        },
+        options: {
+            responsive: false,
+            title: {
+                display: true,
+                text: 'Section Score',
+                fontSize:20,
+                fontColor:'#000000',
+                fontFamily:"'Raleway', sans-serif"
+            },
+            legend: {
+                display: false
+            },
+            tooltips: {
+                callbacks: {
+                label: function(tooltipItem) {
+                console.log(tooltipItem)
+                    return tooltipItem.yLabel;
+                }
+            }
+            },
+            scales: {
+            xAxes: [{
+                ticks: {
+                maxRotation: 90,
+                minRotation: 80
+                },
+                gridLines: {
+                offsetGridLines: true // à rajouter
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                beginAtZero: true
+                }
+            }]
+            }
+        }
+        });
+    </script>
+</body>
+</html>

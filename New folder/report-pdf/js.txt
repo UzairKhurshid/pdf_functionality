@@ -1,0 +1,60 @@
+//run this command in terminal to install ejs
+npm i ejs
+
+//import modules
+const path=require('path')
+let ejs = require("ejs")
+
+
+//in route after line 1379 .replace pdf.create function with code given below.
+
+
+var secName=[]
+          var secScore=[]
+          for (const i of inspection_obj.sections) {
+              
+              
+              if(i.title.length > 15){
+                  var s=i.title;
+                  var ans = s.substr(0, 15);
+                  secName.push(ans)
+              }else{
+                  secName.push(i.title)
+              }
+              secScore.push(i.score)
+          }
+              
+
+          inspection_obj.secName=secName;
+          inspection_obj.secScore=secScore;
+
+          ejs.renderFile(path.join(__dirname, './', "report.ejs"),{inspection_obj: inspection_obj}, (err, data) => {
+            if (err) {
+                  res.send(err);
+            } else {
+              console.log('converting to pdf ...')
+                let options = {
+                    format: 'A4',
+                    paginationOffset: 1,       // Override the initial pagination number
+                    "header": {
+                      "height": "4mm",
+                    },
+                    "footer": {
+                      "contents": {
+                        default: '<div style="text-align:center;height:10px;bottom:0;"><p style="color: #444; text-align: center;">UrAudits</p></div>'
+                      }
+                    }
+                };
+                pdf.create(data, options).toBuffer(async function (err, buffer) {
+                    
+                    var pdfBuffer = new Buffer.from(buffer);
+                    res.setHeader(
+                      "Content-disposition",  
+                      `inline; filename="report.pdf"`
+                    );
+                    res.setHeader("Content-type", "application/pdf");
+                    res.send(pdfBuffer);
+                  });
+            }
+        })
+
